@@ -1,18 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('TimeDiff', [
-    'ngRoute',
-    'TimeDiff.main'
-    // 'TimeDiff.version'
-]).
-config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
-    // $locationProvider.hashPrefix('!');
+var app = angular.module('timediff', ['timediff.main', 'timediff.clock'])
+.config(function(){});
 
-    $routeProvider.otherwise({redirectTo: 'main'});
-}])
-.controller('AppCtrl', AppCtrl);
-
-function AppCtrl ($scope) {
-    $scope.test = 'hello world';
-}
+app.run();

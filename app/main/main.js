@@ -1,14 +1,24 @@
-'use strict';
+// 'use strict';
 
-angular.module('TimeDiff.main', ['ngRoute'])
+var mainModule = angular.module('timediff.main', ['timediff.clock']);
 
-.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/main', {
-        templateUrl: 'app/main/main.html',
-        controller: 'MainCtrl'
-    });
-}])
+mainModule.controller('AppCtrl', AppCtrl);
 
-.controller('MainCtrl', [function() {
-    console.log(1)
-}]);
+mainModule.directive('addnewtime', addnewtime);
+
+function AppCtrl ($scope) {
+    $scope.main = {url: 'app/main/main.html'};
+    $scope.colorTheme = 1;
+    $scope.additionalTimesCount = 0;
+};
+
+function addnewtime ($compile) {
+    return function($scope, element, attrs) {
+        element.bind('click', function() {
+            $scope.count++;
+            $('.additionalZones').append($compile('<div data-cover-message="Please select timezone" data-delete="True">' +
+                                        '<clock clock="clock" ></clock>' +
+                                    '</div>')($scope));
+        });
+    };
+};
