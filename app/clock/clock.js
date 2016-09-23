@@ -2,16 +2,22 @@
 
 angular.module('timediff.clock', [])
 
-.directive('clock', ['$parse', function ($parse) {
+.directive('clock', function () {
     return {
         templateUrl: 'app/clock/clock.html',
         replace: true,
         restrict: 'E',
+        // scope: {
+        //     clockid: '='
+        // },
         link: clockCtrl
     }
-}]);
+});
+
 
 function clockCtrl ($scope, element, attr) {
+
+    var divContainer = $(element).parent();
 
     var optionKeys = [
             'autostart', //(boolean) If this is set to false, the clock will not auto start. The default value is true.
@@ -24,13 +30,13 @@ function clockCtrl ($scope, element, attr) {
         ], options = {
             callbacks: {}
         },
-        _clock,
+        clock,
         date = new Date(),
         methods = [
             'start', //This method will start the clock just call the .start() method on an FlipClock object.
             'stop',  // This method will stop the clock just call the .stop() method on an FlipClock object.
             'setTime', //This method will set the clock time after it has been instantiated just call the .setTime() method on an FlipClock object.
-            'setCountdown', //This method will change the clock from counting up or down.
+            // 'setCountdown', //This method will change the clock from counting up or down.
             'getTime' //To get the clock time after it has been instantiated just call the .getTime() method on an FlipClock object.
         ],
         callbacks = [
@@ -64,9 +70,9 @@ function clockCtrl ($scope, element, attr) {
     });
 
     //init callbacks
-    callbacks.forEach(function(callback) {
+    callbacks.forEach(function (callback) {
         if(attr[callback]){
-            options.callbacks[callback] = function(){
+            options.callbacks[callback] = function (){
                 $parse(attr[callback])($scope);
             }
         }
@@ -74,17 +80,23 @@ function clockCtrl ($scope, element, attr) {
 
     options.clockFace = 'TwentyFourHourClock';
     //generate clock object
-    var _clock = new FlipClock($(element).find('.clock'), options);
+    clock = new FlipClock($(element).find('.clock'), options);
+    // $scope.clock = clock;
 
     //bind methods to the $scope
-    methods.forEach(function(method) {
-        $scope[method] = function() {
-            return _clock[method].apply(_clock, arguments);
+    methods.forEach(function (method) {
+        $scope[method] = function () {
+            return clock[method].apply(clock, arguments);
         }
     });
 
-    $scope.coverMessage = $(element).parent().data('cover-message');
+    $scope.clockid = attr.clockid;
+    $scope.coverMessage = divContainer.data('cover-message');
+    $scope.showDelete = function () {return $scope.clockid !== 'mainClock';};
 
-    // $scope.setTime(date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds())
-    console.log(date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds())
+    // Huck
+    if ($scope.clockid === 'mainClock') {
+        _scope.childScopes['mainClock'] = $scope;
+    }
+
 };

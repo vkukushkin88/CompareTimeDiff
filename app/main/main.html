@@ -1,18 +1,13 @@
-<div ng-controller="AppCtrl as ctrl">
+<div ng-controller="AppCtrl as ctrl" ng-mousedown="mousDown()" ng-mouseup="mousUp()" ng-mousemove="mouseMove($event)">
     <div class="site-wrapper-inner">
         <div class="cover-container">
 
-            <div data-cover-message="Your time" data-delete="False">
-                <clock clock="clock" ></clock>
+            <div data-cover-message="Your time" data-delete="False" id="mainClock">
+                <clock clock="clock" clockid="mainClock"></clock>
             </div>
 
-            <div class="additionalZones">
-                <!-- <div data-cover-message="Your time" data-delete="False">
-                    <clock clock="clock" ></clock>
-                </div> -->
-            </div>
+            <div class="additionalZones"></div>
 
-            <addnewtime addnewtime="addnewtime"></addnewtime>
             <button type="button" class="btn btn-default" addnewtime>+</button>
 
             <div class="mastfoot">
